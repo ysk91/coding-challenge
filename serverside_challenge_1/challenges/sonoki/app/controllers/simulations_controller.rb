@@ -18,6 +18,8 @@ class SimulationsController < ActionController::Base
 
     data = JSON.parse(response.body)
     @results = data
-    render "output"
+    respond_to do |format|
+      format.html
+    end
   end
 end
