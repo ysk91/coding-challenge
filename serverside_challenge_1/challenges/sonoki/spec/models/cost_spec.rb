@@ -6,11 +6,11 @@ RSpec.describe Cost, type: :model do
 
   describe "メソッド" do
     context "calculate" do
-      let(:cost) { Cost.new(contract_ampere: valid_contract_ampere, usage: valid_usage) }
+      let(:query) { Query.new(contract_ampere: valid_contract_ampere, usage: valid_usage) }
       let(:plans) { Plan.new.send(:all_plans) }
 
       it "電力料金の計算結果が全データ数と一致すること" do
-        calculated_costs = cost.calculate
+        calculated_costs = Cost.calculate(query)
         expect(calculated_costs.count).to eq(plans.count)
 
         calculated_costs.each_with_index do |calculated_cost, index|
@@ -21,20 +21,20 @@ RSpec.describe Cost, type: :model do
       end
 
       it "使用量に対して、電力料金が計算されること" do
-        cost.usage = "200"
-        calculated_costs = cost.calculate
+        query.usage = "200"
+        calculated_costs = Cost.calculate(query)
         expect(calculated_costs).not_to be_empty
       end
 
       it "大きな使用量に対して、電力料金が計算されること" do
-        cost.usage = "10000"
-        calculated_costs = cost.calculate
+        query.usage = "10000"
+        calculated_costs = Cost.calculate(query)
         expect(calculated_costs).not_to be_empty
       end
 
       it "contract_ampere および usage の値が不正な場合、空の配列を返すこと" do
-        invalid_cost = Cost.new(contract_ampere: "5", usage: "-10")
-        calculated_costs = invalid_cost.calculate
+        invalid_query = Query.new(contract_ampere: "5", usage: "-10")
+        calculated_costs = Cost.calculate(invalid_query)
         expect(calculated_costs).to be_empty
       end
     end
