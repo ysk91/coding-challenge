@@ -1,11 +1,11 @@
 class Api::V1::CostsController < ApplicationController
-  include YamlLoader
+  include PlansLoader
 
   def index
     render json: {
       status: 'SUCCESS',
       message: '電力会社とコスト一覧の取得に成功しました',
-      data: yaml_data # TODO 名前が抽象的
+      data: load_plans
     }, status: 200
   end
 

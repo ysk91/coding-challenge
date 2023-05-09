@@ -1,6 +1,5 @@
 class Cost
   include ActiveModel::Model
-  include YamlLoader
 
   attr_accessor :contract_ampere, :usage
 
@@ -10,10 +9,10 @@ class Cost
   validates :usage,             presence: true
 
   def calculate
-    rates = yaml_data
+    @plans = Plan.new.all_plans
     costs = []
 
-    rates.each do |key, values|
+    @plans.each do |key, values|
       basic_rate = values['basic_rates'][contract_ampere.to_i]
       next unless basic_rate
 

@@ -51,16 +51,16 @@ RSpec.describe Cost, type: :model do
   describe "インスタンスメソッド" do
     context "calculate" do
       let(:cost) { Cost.new(contract_ampere: valid_contract_ampere, usage: valid_usage) }
-      let(:rates) { cost.send(:yaml_data) }
+      let(:plans) { Plan.new.send(:all_plans) }
 
       it "電力料金の計算結果が全データ数と一致すること" do
         calculated_costs = cost.calculate
-        expect(calculated_costs.count).to eq(rates.count)
+        expect(calculated_costs.count).to eq(plans.count)
 
         calculated_costs.each_with_index do |calculated_cost, index|
-          provider_key = rates.keys[index]
+          provider_key = plans.keys[index]
           expect(calculated_cost[:provider_name]).to eq(provider_key)
-          expect(calculated_cost[:plan_name]).to eq(rates[provider_key]['plan_name'])
+          expect(calculated_cost[:plan_name]).to eq(plans[provider_key]['plan_name'])
         end
       end
 
