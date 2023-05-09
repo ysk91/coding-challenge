@@ -5,14 +5,14 @@ class Api::V1::CostsController < ApplicationController
     render json: {
       status: 'SUCCESS',
       message: '電力会社とコスト一覧の取得に成功しました',
-      data: load_plans
+      data: Plan.new.all_plans
     }, status: 200
   end
 
   def calculate_rate
-    @cost_query = Cost.new(query_params)
-    if @cost_query.valid?
-      @costs = @cost_query.calculate
+    @query = Query.new(query_params)
+    if @query.valid?
+      @costs = Cost.calculate(@query)
       render json: @costs, status: 200
     else
       render json: { error: 'Invalid input: contract_ampere and usage are required' }, status: 400

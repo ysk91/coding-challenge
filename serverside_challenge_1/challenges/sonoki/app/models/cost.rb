@@ -1,14 +1,10 @@
 class Cost
   include ActiveModel::Model
 
-  attr_accessor :contract_ampere, :usage
+  def self.calculate(query)
+    contract_ampere = query.contract_ampere
+    usage = query.usage
 
-  validates :contract_ampere,   presence: true,
-                                inclusion: { in: %w(10 15 20 30 40 50 60) }
-
-  validates :usage,             presence: true
-
-  def calculate
     @plans = Plan.new.all_plans
     costs = []
 
